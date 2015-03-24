@@ -17,6 +17,7 @@ import io
 import json
 import shutil
 import fnmatch
+
 from datetime import datetime
 try:
     from urllib.request import FancyURLopener
@@ -64,7 +65,14 @@ class ChromeDownloader(FancyURLopener):
         'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
         '(KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36')
 
-urlretrieve = ChromeDownloader().retrieve
+try:
+    import wget
+    print('found wget')
+    
+    def urlretrieve(url, filename, report_hook):
+        wget.download(url, out=filename)
+except ImportError:
+    urlretrieve = ChromeDownloader().retrieve
 
 
 class JsonStore(object):
